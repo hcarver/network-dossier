@@ -1,0 +1,14 @@
+%h1 Top#home
+%p Find me in app/views/top/home.html.haml
+
+- if user_signed_in?
+  You're signed in!
+
+  = link_to "Sign out", destroy_user_session_path, :method => :delete
+
+  %h4
+    Go
+    =link_to "here", events_path
+    to add notes
+- else
+  =link_to "Sign in", user_omniauth_authorize_path(:meetup)

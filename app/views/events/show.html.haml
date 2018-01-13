@@ -1,0 +1,30 @@
+%p#notice= notice
+
+= link_to 'Back', events_path
+
+%h1
+  =@event.name
+  at
+  =@event.time
+  with
+  =@event.group_name
+  at
+  =@event.venue_name
+
+=form_for current_user, url: update_notes_event_path, method: :put do |f|
+  %table
+    -@event.meetup_profiles.each do |attendee|
+      %tr
+        %td
+          =attendee.name
+        %td
+          %a{href: attendee.photo_url}
+            =image_tag attendee.photo_url, style: "max-height: 60px"
+        %td
+          - note = (f.object.notes.where(about: attendee).first() or Note.new(about: attendee))
+
+          =fields_for 'notes_attributes[]', attendee, id: attendee.id do |ff|
+            =ff.text_area :note_text, value: note.note_text, rows: 3
+  = f.submit 'Update'
+
+= link_to 'Back', events_path
